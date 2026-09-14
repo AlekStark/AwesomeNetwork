@@ -1,0 +1,20 @@
+﻿@model AwesomeNetwork.ViewModels.Account.MainViewModel;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <div class="side">
+        <div class="center">
+            Пользуйтесь нашей самой крутой соцсетью! Регистрируйтесь всего за 2 минуты, делитесь мыслями, находите новых друзей.
+        </div>
+        <img class="main-img" src="https://pngimg.com/uploads/fox/fox_PNG23172.png" />
+    </div>
+
+
+    <div class="main">
+        <partial name="Login" />
+        <partial name="Register" />
+    </div>
+
+</div>

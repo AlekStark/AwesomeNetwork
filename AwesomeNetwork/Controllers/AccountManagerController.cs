@@ -3,6 +3,7 @@ using AwesomeNetwork.ViewModels.Account;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using AwesomeNetwork.Models.Users;
 
 namespace AwesomeNetwork.Controllers
 {

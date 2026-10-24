@@ -26,14 +26,16 @@ namespace AwesomeNetwork.Controllers.Account
         [HttpGet]
         public IActionResult Login()
         {
+            //return View("Home/Login");
             return View("Home/Login");
         }
 
-        [HttpGet]
-        public IActionResult Login(string returnUrl = null)
-        {
-            return View(new LoginViewModel { ReturnUrl = returnUrl });
-        }
+        //[Route("Login")]
+        //[HttpGet]
+        //public IActionResult Login(string returnUrl = null)
+        //{
+        //    return View(new LoginViewModel { ReturnUrl = returnUrl });
+        //}
 
         [Route("Login")]
         [HttpPost]

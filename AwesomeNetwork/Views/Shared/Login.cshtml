@@ -20,6 +20,12 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
         </div>
+        @* Чекбокс "Запомнить меня" *@
+        <div class="mrgn form-check">
+            <label class="form-check-label">
+                <input asp-for="RememberMe" class="form-check-input" /> Запомнить меня?
+            </label>
+        </div>
         <div>
             <input class="enter_submit" type="submit" value="Войти" />
         </div>

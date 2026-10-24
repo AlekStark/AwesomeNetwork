@@ -5,6 +5,11 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-        <a class="exit_submit" asp-area="" asp-controller="AccountManager" asp-action="Logout">Выход</a>
-@*         <input asp-area="" asp-controller="AccountManager" asp-action="Logout"  type="submit" value="Выход" /> *@
+      @*Пример из курсов, он ошибочен
+        <a class="exit_submit" asp-area="" asp-controller="AccountManager" asp-action="Logout">Выход</a>*@
+          
+        <!-- ВНИМАНИЕ: Метод должен быть POST! --> 
+        <form method="post" asp-controller="AccountManager" asp-action="Logout"> 
+        <button type="submit" class="exit_submit">Выход</button> 
+        </form>
 }

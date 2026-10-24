@@ -1,27 +1,33 @@
-﻿@using Microsoft.AspNetCore.Identity;
-@using AwesomeNetwork.Models.Users;
-@inject SignInManager<User> SignInManager
-@inject UserManager<User> UserManager
+﻿@model AwesomeNetwork.ViewModels.Account.LoginViewModel
 
-<ul class="navbar-nav">
-    @if(User != null && SignInManager.IsSignedIn(User))
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-            </form>
-        </li>
-    }
-    else
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-        </li>
-    }
-</ul>
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="block-reg background-white">
+    <h4 class="center">Добро пожаловать!</h4>
+    <form class="frm" method="post" asp-controller="AccountManager" asp-action="Login">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div>
+            <div class="mrgn">
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div>
+            <div class="mrgn">
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+        @* Чекбокс "Запомнить меня" *@ 
+        <div class="mrgn form-check"> 
+            <label class="form-check-label"> 
+                <input asp-for="RememberMe" class="form-check-input" /> Запомнить меня? 
+            </label> 
+        </div>
+        <div>
+            <input class="enter_submit" type="submit" value="Войти" />
+        </div>
+    </form>
+</div>

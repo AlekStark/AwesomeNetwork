@@ -1,0 +1,48 @@
+﻿@model AwesomeNetwork.ViewModels.Account.UserViewModel
+@using Microsoft.AspNetCore.Identity;
+@using AwesomeNetwork.Models.Users;
+@inject SignInManager<User> SignInManager
+
+@if (!SignInManager.IsSignedIn(User))
+{
+    <div class="alert alert-danger">Вы должны быть авторизованы.</div>
+}
+else
+{
+<div class="container mt-4">
+    <!-- Заголовок -->
+        <h1 class="mb-3">@Model.User.GetFullName</h1>
+    
+    <!-- Аватарка -->
+        @if (@Model.User.Image != null)
+    {
+            <img src="@Model.User.Image" alt="Аватар пользователя" style="width: 100%; max-width: 300px; margin-bottom: 1rem;" />
+    }
+    else
+    {
+        <!-- Если аватарка не загружена, показываем заглушку -->
+        <div class="card mb-3 p-3 text-center">
+            <p class="text-muted">500 x 500</p>
+            <small class="text-muted">Powered by HTML.COM</small>
+        </div>
+    }
+
+    <!-- Блок информации -->
+    <ul class="list-unstyled">
+            <li><strong>Статус:</strong> @Model.User.Status</li>
+            <li><strong>Дата рождения:</strong> @Model.User.BirthDate.ToString("dd MMMM yyyy г.")</li>
+        <li><strong>О себе:</strong> @Model.User.About</li>
+            <li><strong>Email:</strong> @Model.User.Email</li>
+    </ul>
+
+    <!-- Горизонтальная линия -->
+    <hr class="my-4"/>
+
+    <!-- Список друзей (пустое место) -->
+    <h6>Список друзей</h6>
+    <p class="text-muted">(Здесь будут отображаться друзья)</p>
+
+    <!-- Кнопка редактирования -->
+    <a asp-controller="Account" asp-action="EditUserProfile" class="btn btn-primary w-100 py-3 fw-bold">Редактировать</a>
+</div>
+}

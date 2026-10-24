@@ -29,6 +29,11 @@ namespace AwesomeNetwork.Controllers.Account
             return View("Home/Login");
         }
 
+        [HttpGet]
+        public IActionResult Login(string returnUrl = null)
+        {
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
+        }
 
         [Route("Login")]
         [HttpPost]
@@ -40,17 +45,10 @@ namespace AwesomeNetwork.Controllers.Account
 
                 var user = _mapper.Map<User>(model);
 
-                var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
+                var result = await _signInManager.PasswordSignInAsync(user.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
+                    return RedirectToAction("MyPage", "AccountManager");
                 }
                 else
                 {
@@ -69,8 +67,6 @@ namespace AwesomeNetwork.Controllers.Account
             return RedirectToAction("Index", "Home");
         }
 
-
-        [Authorize]
         [Route("MyPage")]
         [HttpGet]
         public IActionResult MyPage()
@@ -80,6 +76,35 @@ namespace AwesomeNetwork.Controllers.Account
             var result = _userManager.GetUserAsync(user);
 
             return View("User", new UserViewModel(result.Result));
+        } 
+
+
+        [Authorize]
+        [Route("Update")]
+        [HttpPost]
+        public async Task<IActionResult> Update(UserEditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(model.UserId);
+
+                user.Convert(model);
+
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("MyPage", "AccountManager");
+                }
+                else
+                {
+                    return RedirectToAction("Edit", "AccountManager");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Некорректные данные");
+                return View("Edit", model);
+            }
         }
 
     }

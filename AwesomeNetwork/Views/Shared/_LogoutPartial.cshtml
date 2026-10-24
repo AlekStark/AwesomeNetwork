@@ -5,8 +5,6 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <div>
-        <input class="exit_submit" type="submit" value="Выход" />
-    </div>
-   @*  <a asp-area="" asp-controller="AccountManager" asp-action="Logout">Выход</a> *@
+        <a class="exit_submit" asp-area="" asp-controller="AccountManager" asp-action="Logout">Выход</a>
+@*         <input asp-area="" asp-controller="AccountManager" asp-action="Logout"  type="submit" value="Выход" /> *@
 }

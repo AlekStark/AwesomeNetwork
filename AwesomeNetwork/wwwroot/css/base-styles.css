@@ -1,17 +1,17 @@
-﻿.topnav { /* Убираем overflow: hidden; он нам больше не нужен */
+﻿.topnav { 
     display: flex;
     justify-content: space-between; /* Разделяет меню слева и поиск/кнопку справа */
     align-items: center; /* Центрирует содержимое по вертикали */
 }
     /* Меню навигации */
 
-    .topnav a { /* float: left; -- удаляем это */
+    .topnav a { 
         padding: 14px 16px;
         margin-right: 8px; /* Небольшой отступ между ссылками */
     }
     /* Поисковая строка */
 
-    .topnav .search-container { /* float: right; -- удаляем это */
+    .topnav .search-container { 
         display: flex;
         gap: 8px; /* Отступ между полем ввода и кнопкой поиска */
         margin-left: auto;
@@ -19,11 +19,11 @@
     }
 
     .topnav input[type=text] {
-        border-radius: 5px; /* Для красоты */
+        border-radius: 5px; 
     }
     /* Кнопка выхода */
 
-    .topnav .exit_submit { /* float: right !important; -- удаляем это */
+    .topnav .exit_submit { 
         background-color: #5181b8;
         color: white;
         padding: 7px 16px;

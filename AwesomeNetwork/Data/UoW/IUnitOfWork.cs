@@ -1,6 +1,6 @@
 ﻿using AwesomeNetwork.Data.Repository;
 
-namespace AwesomeNetwork.Data.UnitOfWork
+namespace AwesomeNetwork.Data.UoW
 {
     public interface IUnitOfWork : IDisposable
     {

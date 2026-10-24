@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using AwesomeNetwork.Models.Users;
 using AwesomeNetwork.ViewModels.Account;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using AwesomeNetwork.Models.Users;
 
-namespace AwesomeNetwork.Controllers
+namespace AwesomeNetwork.Controllers.Account
 {
     public class AccountManagerController : Controller
     {
@@ -20,6 +20,7 @@ namespace AwesomeNetwork.Controllers
             _signInManager = signInManager;
             _mapper = mapper;
         }
+
 
         [Route("Login")]
         [HttpGet]
@@ -67,5 +68,19 @@ namespace AwesomeNetwork.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+
+        [Authorize]
+        [Route("MyPage")]
+        [HttpGet]
+        public IActionResult MyPage()
+        {
+            var user = User;
+
+            var result = _userManager.GetUserAsync(user);
+
+            return View("User", new UserViewModel(result.Result));
+        }
+
     }
 }

@@ -18,7 +18,7 @@
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
         </div>
-        <div> 
+        <div>
             <div class="mrgn">
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
@@ -26,9 +26,8 @@
         </div>
 
         <div class="text-color-gray text-size_12">Дата рождения</div>
-          <div class="mrgn center">
+        <div class="mrgn center">
             <select asp-for="Date" class="form-control date_control" ID="ddlDay">
-                <option value="">@Model.Date</option>
             </select>
             <span asp-validation-for="Date" class="text-danger"></span>
 
@@ -41,7 +40,6 @@
             <select asp-for="Year" class="form-control date_control" ID="ddlYear"
                     asp-items="Enumerable.Range(DateTime.Now.AddYears(-100).Year, DateTime.Now.AddYears(-14).Year - DateTime.Now.AddYears(-100).Year).Reverse().Select(x => new SelectListItem(x.ToString(), x.ToString()))"
                     onchange="PopulateDays()">
-                <option value="">@Model.Year</option>
             </select>
             <span asp-validation-for="Year" class="text-danger"></span>
         </div>
@@ -51,7 +49,7 @@
         </div>
     </form>
 
-    @Model.Month 
+    @Model.Month
 
     <script src="http://code.jquery.com/jquery-latest.js"></script>
 

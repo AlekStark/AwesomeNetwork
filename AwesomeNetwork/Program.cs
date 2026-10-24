@@ -1,6 +1,8 @@
+using AwesomeNetwork.Models.Users;
+//using CommunityToolkit.HighPerformance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using AwesomeNetwork.Models.Users;
+using AutoMapper;
 
 namespace AwesomeNetwork
 {
@@ -9,10 +11,7 @@ namespace AwesomeNetwork
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-            builder.Services.AddControllersWithViews();
-            builder.Services.AddAutoMapper(typeof(Program));
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
             var connection = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
             builder.Services.AddIdentity<User, IdentityRole>(opts => {
@@ -23,6 +22,8 @@ namespace AwesomeNetwork
                 opts.Password.RequireDigit = false;
             })
                     .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

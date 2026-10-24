@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
+using AwesomeNetwork.Models.Users;
 using AwesomeNetwork.ViewModels.Account;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using AwesomeNetwork.Models.Users;
 
-namespace AwesomeNetwork.Controllers
+namespace AwesomeNetwork.Controllers.Account
 {
     public class RegisterController : Controller
     {
@@ -21,6 +20,7 @@ namespace AwesomeNetwork.Controllers
             _signInManager = signInManager;
         }
 
+
         [Route("Register")]
         [HttpGet]
         public IActionResult Register()
@@ -34,6 +34,8 @@ namespace AwesomeNetwork.Controllers
         {
             return View("RegisterPart2", model);
         }
+
+
 
         [Route("Register")]
         [HttpPost]

@@ -1,16 +1,34 @@
-using AwesomeNetwork.Models;
-using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using AwesomeNetwork.Models;
+using AwesomeNetwork.Data.UoW;
+using AutoMapper;
+using AwesomeNetwork.ViewModels.Account;
 
 namespace AwesomeNetwork.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ILogger<HomeController> _logger;
+
+        public HomeController(ILogger<HomeController> logger)
         {
-            return View();
+            _logger = logger;
         }
 
+        [Route("")]
+        [Route("[controller]/[action]")]
+        public IActionResult Index()
+        {
+            return View(new MainViewModel());
+        }
+
+        [Route("[action]")]
         public IActionResult Privacy()
         {
             return View();

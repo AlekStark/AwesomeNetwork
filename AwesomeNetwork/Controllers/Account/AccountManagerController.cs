@@ -27,7 +27,7 @@ namespace AwesomeNetwork.Controllers.Account
         public IActionResult Login()
         {
             //return View("Home/Login");
-            return View("Home/Login");
+            return View("MyPage");
         }
 
         //[Route("Login")]
@@ -47,7 +47,7 @@ namespace AwesomeNetwork.Controllers.Account
 
                 var user = _mapper.Map<User>(model);
 
-                var result = await _signInManager.PasswordSignInAsync(user.Email, model.Password, model.RememberMe, false);
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("MyPage", "AccountManager");
@@ -55,6 +55,7 @@ namespace AwesomeNetwork.Controllers.Account
                 else
                 {
                     ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+                    return View(model);
                 }
             }
             return View("Views/Home/Index.cshtml");
@@ -77,7 +78,7 @@ namespace AwesomeNetwork.Controllers.Account
 
             var result = _userManager.GetUserAsync(user);
 
-            return View("User", new UserViewModel(result.Result));
+            return View("MyPage", new UserViewModel(result.Result));
         } 
 
 

@@ -4,10 +4,15 @@ namespace AwesomeNetwork.ViewModels.Account
 {
     public class LoginViewModel
     {
+        //[Required]
+        //[EmailAddress]
+        //[Display(Name = "Email", Prompt = "Введите email")]
+        //public string Email { get; set; }
+
         [Required]
-        [EmailAddress]
-        [Display(Name = "Email", Prompt = "Введите email")]
-        public string Email { get; set; }
+        //[UserName]
+        [Display(Name = "UserName", Prompt = "Введите логин")]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

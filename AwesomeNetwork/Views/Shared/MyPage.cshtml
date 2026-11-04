@@ -9,40 +9,39 @@
 }
 else
 {
-<div class="container mt-4">
-    <!-- Заголовок -->
-        <h1 class="mb-3">@Model.User.GetFullName()</h1>
-    
-    <!-- Аватарка -->
-        @if (@Model.User.Image != null)
-    {
-            <img src="@Model.User.Image" alt="Аватар пользователя" style="width: 100%; max-width: 300px; margin-bottom: 1rem;" />
-    }
-    else
-    {
-        <!-- Если аватарка не загружена, показываем заглушку -->
-        <div class="card mb-3 p-3 text-center">
-            <p class="text-muted">500 x 500</p>
-            <small class="text-muted">Powered by HTML.COM</small>
-        </div>
-    }
+	<!-- Теперь весь контент находится в сетке -->
+	<h1>@Model.User.GetFullName()</h1>
 
-    <!-- Блок информации -->
-    <ul class="list-unstyled">
-            <li><strong>Статус:</strong> @Model.User.Status</li>
-            <li><strong>Дата рождения:</strong> @Model.User.BirthDate.ToString("dd MMMM yyyy г.")</li>
-        <li><strong>О себе:</strong> @Model.User.About</li>
-            <li><strong>Email:</strong> @Model.User.Email</li>
-    </ul>
+	<div class="grid-container">
+		<div>
+			<!-- Левая часть (аватар) -->
+			<div>
+				<div><img class="profile-img" alt="Аватар" src="https://via.placeholder.com/500" id="01a1a321-b204-7040-b03c-a8f227d73d46" /></div>
+			</div>
 
-    <!-- Горизонтальная линия -->
-    <hr class="my-4"/>
+			<div>
+				<form @* method="post" *@ asp-controller="Account" asp-action="EditUserProfile">
+					<!-- Скрытое поле для защиты от подделки запросов -->
+					@Html.AntiForgeryToken()
 
-    <!-- Список друзей (пустое место) -->
-    <h6>Список друзей</h6>
-    <p class="text-muted">(Здесь будут отображаться друзья)</p>
-
-    <!-- Кнопка редактирования -->
-    <a asp-controller="Account" asp-action="EditUserProfile" class="btn btn-primary w-100 py-3 fw-bold">Редактировать</a>
-</div>
+					<button type="submit"
+							class="button-profile">
+						Редактировать
+					</button>
+				</form>
+			</div>
+		</div>
+		<div>
+			<!-- Правая часть (информация о пользователе) -->
+			<div class="about">
+				<p><strong>Статус:</strong> @Model.User.Status</p>
+				<span><strong>Дата рождения:</strong> @Model.User.BirthDate.ToString("dd MMMM yyyy г.")</span>
+				<br /><span><strong>О себе:</strong> @Model.User.About</span>
+				<br /><span><strong>Email:</strong> @Model.User.Email</span>
+			</div>
+			<div class="frends">
+				<p>(Здесь будут отображаться друзья)</p>
+			</div>
+		</div>
+	</div>
 }

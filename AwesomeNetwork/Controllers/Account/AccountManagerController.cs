@@ -58,7 +58,7 @@ namespace AwesomeNetwork.Controllers.Account
                     return View(model);
                 }
             }
-            return View("Views/Home/Index.cshtml");
+            return View("Views/Shared/MyPage.cshtml");
         }
 
         [Route("Logout")]
@@ -79,8 +79,17 @@ namespace AwesomeNetwork.Controllers.Account
             var result = _userManager.GetUserAsync(user);
 
             return View("MyPage", new UserViewModel(result.Result));
-        } 
+        }
 
+        [Route("EditUserProfile")]
+        [HttpGet]
+        public IActionResult EditUserProfile()
+        {
+            var user = User;
+            var result = _userManager.GetUserAsync(user);
+            var editmodel = _mapper.Map<UserEditViewModel>(result.Result);
+            return View("Account/EditUserProfile.cshtml", editmodel);
+        }
 
         [Authorize]
         [Route("Update")]

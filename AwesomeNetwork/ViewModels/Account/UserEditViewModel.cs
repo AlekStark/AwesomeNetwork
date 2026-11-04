@@ -24,7 +24,8 @@ namespace AwesomeNetwork.ViewModels.Account
         [Display(Name = "Отчество")]
         public string MiddleName { get; set; }
 
-        // Ник пользователя.
+        //Ник пользователя.
+
         //[Required(ErrorMessage = "Ник обязательно.")]
         //[StringLength(20, MinimumLength = 3)]
         //[Display(Name = "Ник")]

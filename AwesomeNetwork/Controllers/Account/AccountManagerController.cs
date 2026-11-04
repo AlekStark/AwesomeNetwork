@@ -88,8 +88,9 @@ namespace AwesomeNetwork.Controllers.Account
             var user = User;
             var result = _userManager.GetUserAsync(user);
             var editmodel = _mapper.Map<UserEditViewModel>(result.Result);
-            return View("Account/EditUserProfile.cshtml", editmodel);
+            return View("EditUserProfile", editmodel);
         }
+
 
         [Authorize]
         [Route("Update")]

@@ -20,14 +20,14 @@ else
 			</div>
 
 			<div>
-				<form @* method="post" *@ asp-controller="Account" asp-action="EditUserProfile">
+				<form method="get" asp-controller="AccountManager" asp-action="EditUserProfile">
 					<!-- Скрытое поле для защиты от подделки запросов -->
-					@Html.AntiForgeryToken()
-
-					<button type="submit"
+					@* @Html.AntiForgeryToken() *@
+					<input class="button-profile" type="submit" value="Редактировать" />
+@* 					<button type="submit"
 							class="button-profile">
 						Редактировать
-					</button>
+					</button> *@
 				</form>
 			</div>
 		</div>

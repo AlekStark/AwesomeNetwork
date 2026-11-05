@@ -110,15 +110,26 @@ namespace AwesomeNetwork.Controllers.Account
                 }
                 else
                 {
-                    return RedirectToAction("Edit", "AccountManager");
+                    return RedirectToAction("EditUserProfile", "AccountManager");
                 }
             }
             else
             {
                 ModelState.AddModelError("", "Некорректные данные");
-                return View("Edit", model);
+                return View("EditUserProfile", model);
             }
         }
 
+
+        [Route("UserList")]
+        [HttpPost]
+        public IActionResult UserList(string search)
+        {
+            var model = new SearchViewModel
+            {
+                UserList = _userManager.Users.AsEnumerable().Where(x => x.GetFullName().Contains(search.ToLower())).ToList()
+            };
+            return View("UserList", model);
+        }
     }
 }

@@ -14,7 +14,7 @@
     <h1>Редактирование профиля</h1>
 
     <!-- Форма с POST-запросом -->
-    <form method="post" asp-controller="Account" asp-action="Edit">
+    <form method="post" asp-controller="AccountManager" asp-action="Update">
         @Html.AntiForgeryToken() <!-- Защита от подделки запросов -->
         @* Скрытое поле идентификатора, чтобы контроллер знал, кого редактировать *@
         <input type="hidden" asp-for="@Model.UserId" />
@@ -58,6 +58,10 @@
                 <div class="mb-3">
                     <label asp-for="@Model.About"></label>
                     <textarea rows="3" class="form-control" asp-for="@Model.About"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="@Model.Status"></label>
+                    <textarea rows="3" class="form-control" asp-for="@Model.Status"></textarea>
                 </div>
             </div>
         </div>

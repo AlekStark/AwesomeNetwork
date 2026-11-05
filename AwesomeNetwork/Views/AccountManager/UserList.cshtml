@@ -1,0 +1,22 @@
+﻿@model AwesomeNetwork.ViewModels.Account.SearchViewModel;
+
+
+<div class="block-reg background-white">
+
+    @if (Model.UserList.Count() != 0)
+    {
+
+        @foreach (var user in @Model.UserList)
+        {
+            <div>
+                <label>@user.GetFullName()</label>
+            </div>
+        }
+    }
+    else
+    {
+        <label> Поиск не дал результатов.</label>
+    }
+
+
+</div>

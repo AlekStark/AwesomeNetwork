@@ -1,5 +1,5 @@
 using AwesomeNetwork.Models.Users;
-//using CommunityToolkit.HighPerformance;
+using AwesomeNetwork.Data.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
@@ -14,6 +14,8 @@ namespace AwesomeNetwork
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
             var connection = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
+                //.AddUnitOfWork()
+                //.AddCustomRepository<Friend, FriendsRepository>();
             builder.Services.AddIdentity<User, IdentityRole>(opts => {
                 opts.Password.RequiredLength = 5;
                 opts.Password.RequireNonAlphanumeric = false;

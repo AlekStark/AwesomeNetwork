@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AwesomeNetwork.Models;
-using AwesomeNetwork.Data.UoW;
 using AutoMapper;
 using AwesomeNetwork.ViewModels.Account;
 

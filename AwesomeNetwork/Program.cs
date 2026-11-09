@@ -1,8 +1,10 @@
-using AwesomeNetwork.Models.Users;
+using AutoMapper;
+using AwesomeNetwork.Configs;
+using AwesomeNetwork.Data;
 using AwesomeNetwork.Data.Repository;
+using AwesomeNetwork.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper;
 
 namespace AwesomeNetwork
 {
@@ -11,19 +13,13 @@ namespace AwesomeNetwork
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddAutoMapper(typeof(Program).Assembly);
-            var connection = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
-                //.AddUnitOfWork()
-                //.AddCustomRepository<Friend, FriendsRepository>();
-            builder.Services.AddIdentity<User, IdentityRole>(opts => {
-                opts.Password.RequiredLength = 5;
-                opts.Password.RequireNonAlphanumeric = false;
-                opts.Password.RequireLowercase = false;
-                opts.Password.RequireUppercase = false;
-                opts.Password.RequireDigit = false;
-            })
-                    .AddEntityFrameworkStores<ApplicationDbContext>();
+            //builder.Services.AddAutoMapper(typeof(Program).Assembly);
+            builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+            builder.Services.AddAwesomeNetwork(builder);
+
+
+
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
             var app = builder.Build();

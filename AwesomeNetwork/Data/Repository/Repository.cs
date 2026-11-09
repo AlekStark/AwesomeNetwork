@@ -8,18 +8,19 @@ namespace AwesomeNetwork.Data.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        protected DbContext _db;
-
+        //protected DbContext _db;
+        private readonly ApplicationDbContext _context;
         public DbSet<T> Set
         {
             get;
             private set;
         }
 
-        public Repository(ApplicationDbContext db)
+        public Repository(ApplicationDbContext context)
         {
-            _db = db;
-            var set = _db.Set<T>();
+            //_db = db;
+            _context = context;
+            var set = _context.Set<T>();
             set.Load();
 
             Set = set;
@@ -28,13 +29,13 @@ namespace AwesomeNetwork.Data.Repository
         public void Create(T item)
         {
             Set.Add(item);
-            _db.SaveChanges();
+            _context.SaveChanges();
         }
 
         public void Delete(T item)
         {
             Set.Remove(item);
-            _db.SaveChanges();
+            _context.SaveChanges();
         }
 
         public T Get(int id)
@@ -50,7 +51,7 @@ namespace AwesomeNetwork.Data.Repository
         public void Update(T item)
         {
             Set.Update(item);
-            _db.SaveChanges();
+            _context.SaveChanges();
         }
     }
 }

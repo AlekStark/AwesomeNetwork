@@ -1,7 +1,4 @@
-﻿using AwesomeNetwork.Models.Users;
-using Microsoft.EntityFrameworkCore;
-
-namespace AwesomeNetwork.Data.Repository
+﻿namespace AwesomeNetwork.Data.Repository
 {
     public class FriendsRepository : Repository<Friend>
     {

@@ -25,7 +25,7 @@ namespace AwesomeNetwork
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddAutoMapper(typeof(Program).Assembly);
-
+            services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromDays(90));
             return services;
         }
     }

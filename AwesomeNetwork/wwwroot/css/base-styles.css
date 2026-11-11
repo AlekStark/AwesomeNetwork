@@ -30,3 +30,15 @@
         border-radius: 5px;
         cursor: pointer;
     }
+.friendcontainer {
+    overflow: hidden;
+}
+
+.friendbox {
+    white-space: nowrap
+}
+
+    .friendbox .datadiv {
+        display: inline-block;
+        max-width: 150px;
+    }

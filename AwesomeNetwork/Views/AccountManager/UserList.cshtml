@@ -1,14 +1,14 @@
 ﻿@model AwesomeNetwork.ViewModels.Account.SearchViewModel;
 
-
 <div class="block-reg background-white">
 
-    @if (Model.UserList.Count() != 0)
+    @* Проверка на null или пустоту *@
+    @if (Model.Users?.Any() == true) // Более современный синтаксис
     {
-
-        @foreach (var user in @Model.UserList)
+        @foreach (var user in Model.Users)
         {
             <div>
+                <!-- Убедитесь, что метод GetFullName есть у UserWithFriendExt -->
                 <label>@user.GetFullName()</label>
             </div>
         }
@@ -17,6 +17,5 @@
     {
         <label> Поиск не дал результатов.</label>
     }
-
 
 </div>

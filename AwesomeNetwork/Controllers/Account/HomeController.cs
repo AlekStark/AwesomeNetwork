@@ -9,7 +9,7 @@ using AwesomeNetwork.Models;
 using AutoMapper;
 using AwesomeNetwork.ViewModels.Account;
 
-namespace AwesomeNetwork.Controllers
+namespace AwesomeNetwork.Controllers.Account
 {
     public class HomeController : Controller
     {

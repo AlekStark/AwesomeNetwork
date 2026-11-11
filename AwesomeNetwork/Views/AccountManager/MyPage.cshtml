@@ -39,8 +39,31 @@ else
 				<br /><span><strong>О себе:</strong> @Model.User.About</span>
 				<br /><span><strong>Email:</strong> @Model.User.Email</span>
 			</div>
-			<div class="frends">
-				<p>(Здесь будут отображаться друзья)</p>
+			<div class="lined-block">
+				<label class="gray-text">Список друзей</label>
+
+				@if (Model.Friends.Count != 0)
+				{
+
+					@foreach (var user in @Model.Friends)
+					{
+						<div>
+							<label>@user.GetFullName()</label>
+							<form asp-controller="AccountManager" asp-action="DeleteFriend" asp-route-id="@user.Id" method="post">
+								<button type="submit" class="btn btn-sm btn-primary">
+									Удалить из друзей
+								</button>
+							</form>
+						</div>
+					}
+				}
+				else
+				{
+					<div>
+						<label> У вас пока нет друзей.</label>
+					</div>
+				}
+
 			</div>
 		</div>
 	</div>

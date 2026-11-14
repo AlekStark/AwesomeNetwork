@@ -1,4 +1,6 @@
-﻿namespace AwesomeNetwork.Models.Users
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AwesomeNetwork.Models.Users
 {
     public class Friend
     {

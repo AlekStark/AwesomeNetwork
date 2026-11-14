@@ -2,7 +2,6 @@
 using AwesomeNetwork.Models.Users;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace AwesomeNetwork.Data
 {
@@ -16,7 +15,7 @@ namespace AwesomeNetwork.Data
             : base(options)
         {
             //Database.EnsureCreated();
-            Database.MigrateAsync();
+            Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

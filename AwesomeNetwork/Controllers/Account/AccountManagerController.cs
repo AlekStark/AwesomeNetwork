@@ -77,7 +77,7 @@ namespace AwesomeNetwork.Controllers.Account
             // Вызываем первый перегруженный метод.
             model.Friends = await GetAllFriend(model.User);
 
-            return View("User", model);
+            return View(model);
         }
 
         // Первый вариант метода: принимает явного пользователя.

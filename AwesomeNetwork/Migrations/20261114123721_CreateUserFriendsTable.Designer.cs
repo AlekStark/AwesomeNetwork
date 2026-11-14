@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AwesomeNetwork.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261111064924_CreateFriendshipTable")]
-    partial class CreateFriendshipTable
+    [Migration("20261114123721_CreateUserFriendsTable")]
+    partial class CreateUserFriendsTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

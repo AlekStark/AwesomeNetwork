@@ -25,6 +25,7 @@ namespace AwesomeNetwork.Controllers.Account
         public IActionResult Index()
         {
             return View(new MainViewModel());
+            //return View();
         }
 
         [Route("[action]")]

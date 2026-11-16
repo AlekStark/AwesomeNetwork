@@ -60,7 +60,8 @@ namespace AwesomeNetwork.Controllers.Account
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction(nameof(HomeController.Index), nameof(HomeController));
+            //return View();
+            return RedirectToAction("Index", "Home");
         }
 
         [Authorize]
@@ -185,7 +186,7 @@ namespace AwesomeNetwork.Controllers.Account
                 }
             }
 
-            return View(new SearchViewModel { Users = users });
+            return View("UserList", new SearchViewModel { Users = users });
         }
 
         [Route("AddFriend")]

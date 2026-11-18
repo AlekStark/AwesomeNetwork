@@ -78,6 +78,15 @@ hr {
     font-size: 10px;
     color: #aaa;
 }
-.frends {
+.lined-block {
     margin-top: 20px;
+}
+
+.friend-img {
+    width: 135px;
+    height: 135px;
+}
+.friend-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 }

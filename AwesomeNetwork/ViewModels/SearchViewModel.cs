@@ -12,7 +12,7 @@ namespace AwesomeNetwork.ViewModels.Account
         /// <summary>
         /// Список найденных пользователей с информацией о дружбе.
         /// </summary>
-        public IEnumerable<UserWithFriendExt> Users { get; set; } = Enumerable.Empty<UserWithFriendExt>();
+        public IEnumerable<UserWithFriendExt> UserList { get; set; } = Enumerable.Empty<UserWithFriendExt>();
 
         /// <summary>
         /// Текущий поисковый запрос пользователя.

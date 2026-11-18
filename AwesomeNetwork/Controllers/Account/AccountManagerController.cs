@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using AwesomeNetwork.Data;
+using AwesomeNetwork.Data.Repository;
 using AwesomeNetwork.Models.Users;
 using AwesomeNetwork.ViewModels.Account; // Убедитесь, что здесь UserWithFriendExt
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace AwesomeNetwork.Controllers.Account
@@ -16,17 +17,20 @@ namespace AwesomeNetwork.Controllers.Account
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly MessageRepository _messageRepository;
 
         public AccountManagerController(
             ApplicationDbContext context,
             IMapper mapper,
             UserManager<User> userManager,
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager,
+            MessageRepository messageRepository)
         {
             _context = context;
             _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
+
         }
 
         [Route("Login")]
@@ -146,49 +150,17 @@ namespace AwesomeNetwork.Controllers.Account
             return View(nameof(EditUserProfile), model);
         }
 
-        /// <summary>
-        /// Регистронезависимый поиск по имени/фамилии.
-        /// Возвращает список вью-моделей с флагом дружбы.
-        /// </summary>
+
         [Authorize]
         [Route("UserList")]
         [HttpPost]
-        public async Task<IActionResult> SearchUsers(string query)
+        public async Task<IActionResult> UserList(string search)
         {
-            // Получаем текущего пользователя
-            var currentUser = await _userManager.GetUserAsync(User);
-
-            // Нормализуем строку запроса
-            string normalizedQuery = query?.Trim().ToLowerInvariant();
-
-            // Запрос к базе данных.
-            // Важно! Все операции до ToListAsync выполняются на стороне SQL Server.
-            var users = await _context.Users
-                .Where(u => u.FirstName.ToLowerInvariant().Contains(normalizedQuery) ||
-                         u.LastName.ToLowerInvariant().Contains(normalizedQuery))
-                .ProjectTo<UserWithFriendExt>(_mapper.ConfigurationProvider) // Mappers!
-                .ToListAsync();
-
-            // Если текущий пользователь залогинен, проверим дружбу.
-            if (currentUser != null && !string.IsNullOrWhiteSpace(query))
-            {
-                // Загружаем ID друзей текущего пользователя.
-                var friendIds = await _context.Friends
-                    .Where(f =>
-                        f.CurrentFriendId == currentUser.Id || f.UserId == currentUser.Id)
-                    .Select(f => f.CurrentFriendId != currentUser.Id ? f.CurrentFriendId : f.UserId)
-                    .ToHashSetAsync(); // HashSet для быстрого поиска O(1).
-
-                // Устанавливаем флаг прямо во вью-моделях.
-                foreach (var user in users)
-                {
-                    user.IsFriendWithCurrent = friendIds.Contains(user.Id);
-                }
-            }
-
-            return View("UserList", new SearchViewModel { Users = users });
+            var model = await CreateSearch(search);
+            return View("UserList", model);
         }
 
+        [Authorize]
         [Route("AddFriend")]
         [HttpPost]
         public async Task<IActionResult> AddFriend(string id)
@@ -226,6 +198,8 @@ namespace AwesomeNetwork.Controllers.Account
 
             return RedirectToAction(nameof(MyPage));
         }
+
+        [Authorize]
         [Route("DeleteFriend")]
         [HttpPost]
         public async Task<IActionResult> DeleteFriend(string id)
@@ -255,6 +229,91 @@ namespace AwesomeNetwork.Controllers.Account
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(MyPage));
+        }
+
+
+        private async Task<SearchViewModel> CreateSearch(string search)
+        {
+            var currentuser = User;
+
+            var result = await _userManager.GetUserAsync(currentuser);
+
+            var list = _userManager.Users.AsEnumerable().Where(x => x.GetFullName().ToLower().Contains(search.ToLower())).ToList();
+            var withfriend = await GetAllFriend();
+
+            var data = new List<UserWithFriendExt>();
+            list.ForEach(x =>
+            {
+                var t = _mapper.Map<UserWithFriendExt>(x);
+                t.IsFriendWithCurrent = withfriend.Where(y => y.Id == x.Id || x.Id == result.Id).Count() != 0;
+                data.Add(t);
+            });
+
+            var model = new SearchViewModel()
+            {
+                UserList = data
+            };
+
+            return model;
+        }
+
+        [Authorize]
+        [Route("Chat")]
+        [HttpGet]
+        public async Task<IActionResult> Chat(string id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var friend = await _userManager.FindByIdAsync(id);
+
+            if (currentUser == null || friend == null)
+            {
+                return NotFound();
+            }
+
+            var messages = await _messageRepository.GetMessagesAsync(currentUser, friend);
+
+            var model = new ChatViewModel
+            {
+                You = currentUser,
+                ToWhom = friend,
+                History = messages.OrderBy(x => x.Id).ToList(),
+            };
+
+            return View("Chat", model);
+        }
+
+        [Authorize]
+        [Route("NewMessage")]
+        [HttpPost]
+        public async Task<IActionResult> NewMessage(string id, ChatViewModel chatViewModel)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var friend = await _userManager.FindByIdAsync(id);
+
+            if (currentUser == null || friend == null)
+            {
+                return NotFound();
+            }
+
+            var message = new Message
+            {
+                Sender = currentUser,
+                Recipient = friend,
+                Text = chatViewModel.NewMessage.Text,
+            };
+
+            await _messageRepository.CreateAsync(message);
+
+            var messages = await _messageRepository.GetMessagesAsync(currentUser, friend);
+
+            var model = new ChatViewModel
+            {
+                You = currentUser,
+                ToWhom = friend,
+                History = messages.OrderBy(x => x.Id).ToList(),
+            };
+
+            return View("Chat", model);
         }
     }
 }

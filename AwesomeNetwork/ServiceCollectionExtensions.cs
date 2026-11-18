@@ -21,12 +21,15 @@ namespace AwesomeNetwork
                 opts.Password.RequireDigit = false;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.Services.AddScoped<FriendService>();
+            builder.Services.AddScoped<FriendRepository>();
+            builder.Services.AddScoped<MessageRepository>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddAutoMapper(typeof(Program).Assembly);
             services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromDays(90));
             return services;
+
         }
     }
 }

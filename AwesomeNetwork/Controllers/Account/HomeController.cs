@@ -1,23 +1,24 @@
+using AutoMapper;
+using AwesomeNetwork.Models;
+using AwesomeNetwork.Models.Users;
+using AwesomeNetwork.ViewModels.Account;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using AwesomeNetwork.Models;
-using AutoMapper;
-using AwesomeNetwork.ViewModels.Account;
 
 namespace AwesomeNetwork.Controllers.Account
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
+        private readonly UserManager<User> _userManager; 
+        public HomeController(UserManager<User> userManager) 
+        { 
+            _userManager = userManager; 
         }
 
         [Route("")]

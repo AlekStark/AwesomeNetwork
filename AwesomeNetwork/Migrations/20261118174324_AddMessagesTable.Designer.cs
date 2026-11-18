@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AwesomeNetwork.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261114123721_CreateUserFriendsTable")]
-    partial class CreateUserFriendsTable
+    [Migration("20261118174324_AddMessagesTable")]
+    partial class AddMessagesTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,6 +48,35 @@ namespace AwesomeNetwork.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserFriends", (string)null);
+                });
+
+            modelBuilder.Entity("AwesomeNetwork.Models.Users.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("RecipientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SenderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipientId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Mesages", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeNetwork.Models.Users.User", b =>
@@ -291,6 +320,25 @@ namespace AwesomeNetwork.Migrations
                     b.Navigation("CurrentFriend");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AwesomeNetwork.Models.Users.Message", b =>
+                {
+                    b.HasOne("AwesomeNetwork.Models.Users.User", "Recipient")
+                        .WithMany()
+                        .HasForeignKey("RecipientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeNetwork.Models.Users.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipient");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

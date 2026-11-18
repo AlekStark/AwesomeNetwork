@@ -1,4 +1,11 @@
-﻿<div class="search-container">
+﻿@using Microsoft.AspNetCore.Identity;
+@using AwesomeNetwork.Models.Users;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="search-container">
 
         <div class="righ-align">
             <form method="post" asp-area="" asp-controller="AccountManager" asp-action="UserList">
@@ -6,4 +13,5 @@
                 <i class="fa fa-search"></i>
             </form>
         </div>
-</div>
+    </div>
+}

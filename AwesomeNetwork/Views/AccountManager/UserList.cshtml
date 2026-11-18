@@ -1,21 +1,32 @@
 ﻿@model AwesomeNetwork.ViewModels.Account.SearchViewModel;
 
+
 <div class="block-reg background-white">
 
-    @* Проверка на null или пустоту *@
-    @if (Model.Users?.Any() == true) // Более современный синтаксис
-    {
-        @foreach (var user in Model.Users)
+    @if (Model.UserList.Any())
+    { 
+
+        @foreach (var user in @Model.UserList)
         {
             <div>
-                <!-- Убедитесь, что метод GetFullName есть у UserWithFriendExt -->
                 <label>@user.GetFullName()</label>
+                @if (!@user.IsFriendWithCurrent)
+                {
+                    <form asp-controller="AccountManager" asp-action="AddFriend" asp-route-id="@user.Id" method="post">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            Добавить в друзья
+                        </button>
+                    </form>
+                }
             </div>
         }
-    }
+     }
     else
     {
-        <label> Поиск не дал результатов.</label>
-    }
+        <div>
+            <label> Поиск не дал результатов.</label>
+        </div>
+    } 
+
 
 </div>

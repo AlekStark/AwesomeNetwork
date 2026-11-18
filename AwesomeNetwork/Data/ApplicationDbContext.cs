@@ -10,6 +10,7 @@ namespace AwesomeNetwork.Data
 
         public DbSet<User> Users => base.Users;
         public DbSet<Friend> Friends { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -22,6 +23,7 @@ namespace AwesomeNetwork.Data
         {
             base.OnModelCreating(builder);
             builder.ApplyConfiguration<Friend>(new FriendConfiguration());
+            builder.ApplyConfiguration<Message>(new MessageConfuiguration());
         }
     }
 }

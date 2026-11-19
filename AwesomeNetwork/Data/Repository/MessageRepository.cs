@@ -27,7 +27,8 @@ namespace AwesomeNetwork.Data.Repository
         }
         public async Task CreateAsync(Message message) 
         { 
-            await _context.Messages.AddAsync(message); await _context.SaveChangesAsync(); 
+            await _context.Messages.AddAsync(message); 
+            //await _context.SaveChangesAsync(); 
         }
     }
 }

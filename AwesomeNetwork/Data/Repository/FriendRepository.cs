@@ -31,7 +31,7 @@ namespace AwesomeNetwork.Data.Repository
             };
 
             await _context.Friends.AddAsync(friendship);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
         }
 
         public async Task<List<User>> GetFriendsByUserAsync(User user)
@@ -59,7 +59,7 @@ namespace AwesomeNetwork.Data.Repository
                 return;
 
             _context.Friends.Remove(friendship);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
         }
     }
 }

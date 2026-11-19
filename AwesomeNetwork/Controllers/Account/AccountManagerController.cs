@@ -87,12 +87,19 @@ namespace AwesomeNetwork.Controllers.Account
         {
             if (user == null) return [];
 
-            return await _context.Friends
-                .Where(f => f.UserId == user.Id || f.CurrentFriendId == user.Id)
-                .Select(f =>
-                    f.UserId == user.Id ? f.CurrentFriend :
-                    f.User)
+            // Вариант с Union (более читаемый и безопасный для EF Core)
+            var userId = user.Id;
+            var friends = await _context.Friends
+                .Where(f => f.UserId == userId)
+                .Select(f => f.CurrentFriend)
+                .Union(
+                    _context.Friends
+                        .Where(f => f.CurrentFriendId == userId)
+                        .Select(f => f.User)
+                )
                 .ToListAsync();
+
+            return friends;
         }
 
         private async Task<List<User>> GetAllFriend()
@@ -218,7 +225,15 @@ namespace AwesomeNetwork.Controllers.Account
 
             var result = await _userManager.GetUserAsync(currentuser);
 
-            var list = _userManager.Users.AsEnumerable().Where(x => x.GetFullName().ToLower().Contains(search.ToLower())).ToList();
+            var normalizedSearch = search?.ToLowerInvariant().Trim(); 
+            var list = await _userManager.Users
+                .Where(u => u.FirstName.ToLower().Contains(normalizedSearch) || u.LastName.ToLower().Contains(normalizedSearch))
+                .ProjectTo<UserWithFriendExt>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            //var list = _userManager.Users.AsEnumerable().Where(x => x.GetFullName().ToLower().Contains(search.ToLower())).ToList();
+
+
             var withfriend = await GetAllFriend();
 
             var data = new List<UserWithFriendExt>();
@@ -293,6 +308,7 @@ namespace AwesomeNetwork.Controllers.Account
             };
 
             await _messageRepository.CreateAsync(message);
+            await _context.SaveChangesAsync();
 
             var model = await GenerateChat(id);
 

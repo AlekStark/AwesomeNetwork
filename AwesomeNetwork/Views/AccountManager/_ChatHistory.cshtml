@@ -1,0 +1,18 @@
+﻿@model AwesomeNetwork.ViewModels.Account.ChatViewModel
+
+@if (Model.History.Count != 0)
+{
+    @foreach (var message in Model.History)
+    {
+        <div>
+            <label> @message.Sender.FirstName:</label>
+            @message.Text
+        </div>
+    }
+}
+else
+{
+    <div>
+        <label> У вас пока нет сообщений с  @Model.ToWhom.GetFullName().</label>
+    </div>
+}

@@ -30,6 +30,7 @@ namespace AwesomeNetwork.Controllers.Account
             _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
+            _messageRepository = messageRepository;
 
         }
 
@@ -338,63 +339,24 @@ namespace AwesomeNetwork.Controllers.Account
                 History = messages.OrderBy(x => x.Id).ToList(),
             };
         }
-        /*       [Authorize]
-               [Route("Chat")]
-               [HttpPost]
-               public async Task<IActionResult> Chat(string id)
-               {
-                   var currentUser = await _userManager.GetUserAsync(User);
-                   var friend = await _userManager.FindByIdAsync(id);
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetChatHistory(string friendId)
+        {
+            // Логика получения данных такая же, как в твоем методе Chat()
+            var currentUser = await _userManager.GetUserAsync(User);
+            var friend = await _userManager.FindByIdAsync(friendId);
 
-                   if (currentUser == null || friend == null)
-                   {
-                       return NotFound();
-                   }
+            if (currentUser == null || friend == null)
+            {
+                return NotFound();
+            }
 
-                   var messages = await _messageRepository.GetMessagesAsync(currentUser, friend);
+            // Создаем модель
+            var model = await GenerateChat(friendId);
 
-                   var model = new ChatViewModel
-                   {
-                       You = currentUser,
-                       ToWhom = friend,
-                       History = messages.OrderBy(x => x.Id).ToList(),
-                   };
-
-                   return View("Chat", model);
-               }
-
-               [Authorize]
-               [Route("NewMessage")]
-               [HttpPost]
-               public async Task<IActionResult> NewMessage(string id, ChatViewModel chatViewModel)
-               {
-                   var currentUser = await _userManager.GetUserAsync(User);
-                   var friend = await _userManager.FindByIdAsync(id);
-
-                   if (currentUser == null || friend == null)
-                   {
-                       return NotFound();
-                   }
-
-                   var message = new Message
-                   {
-                       Sender = currentUser,
-                       Recipient = friend,
-                       Text = chatViewModel.NewMessage.Text,
-                   };
-
-                   await _messageRepository.CreateAsync(message);
-
-                   var messages = await _messageRepository.GetMessagesAsync(currentUser, friend);
-
-                   var model = new ChatViewModel
-                   {
-                       You = currentUser,
-                       ToWhom = friend,
-                       History = messages.OrderBy(x => x.Id).ToList(),
-                   };
-
-                   return View("Chat", model);
-               }*/
+            // Возвращаем HTML-код частичного представления
+            return PartialView("_ChatHistory", model);
+        }
     }
 }

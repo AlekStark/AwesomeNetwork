@@ -4,6 +4,9 @@ namespace AwesomeNetwork.ViewModels.Account
 {
     public class LoginViewModel
     {
+        /// <summary>
+        /// Использовать или Email или Nickname
+        /// </summary>
         //[Required]
         //[EmailAddress]
         //[Display(Name = "Email", Prompt = "Введите email")]

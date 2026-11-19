@@ -4,7 +4,6 @@ namespace AwesomeNetwork.ViewModels.Account
 {
     public class UserEditViewModel
     {
-        // Идентификатор пользователя (GUID). Только для отображения.
         [Display(Name = "Идентификатор")]
         public string UserId { get; set; }
 
@@ -24,8 +23,9 @@ namespace AwesomeNetwork.ViewModels.Account
         [Display(Name = "Отчество")]
         public string MiddleName { get; set; }
 
-        //Ник пользователя.
-
+        /// <summary>
+        /// Использовать или Email или Nickname
+        /// </summary>
         //[Required(ErrorMessage = "Ник обязательно.")]
         //[StringLength(20, MinimumLength = 3)]
         //[Display(Name = "Ник")]

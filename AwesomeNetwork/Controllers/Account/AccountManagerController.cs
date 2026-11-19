@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using AwesomeNetwork.Data;
 using AwesomeNetwork.Data.Repository;
 using AwesomeNetwork.Models.Users;
-using AwesomeNetwork.ViewModels.Account; // Убедитесь, что здесь UserWithFriendExt
+using AwesomeNetwork.ViewModels.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +31,6 @@ namespace AwesomeNetwork.Controllers.Account
             _userManager = userManager;
             _signInManager = signInManager;
             _messageRepository = messageRepository;
-
         }
 
         [Route("Login")]
@@ -65,7 +64,6 @@ namespace AwesomeNetwork.Controllers.Account
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            //return View();
             return RedirectToAction("Index", "Home");
         }
 
@@ -80,37 +78,30 @@ namespace AwesomeNetwork.Controllers.Account
 
             var model = new UserViewModel(result);
 
-            // Вызываем первый перегруженный метод.
             model.Friends = await GetAllFriend(model.User);
 
             return View(model);
         }
 
-        // Первый вариант метода: принимает явного пользователя.
         private async Task<List<User>> GetAllFriend(User user)
         {
             if (user == null) return [];
 
-            // Загрузка друзей одним SQL-запросом.
             return await _context.Friends
                 .Where(f => f.UserId == user.Id || f.CurrentFriendId == user.Id)
                 .Select(f =>
-                    f.UserId == user.Id ? f.CurrentFriend : // Если мы инициатор дружбы
-                    f.User                        // Иначе берем того, кто инициировал
-                )
+                    f.UserId == user.Id ? f.CurrentFriend :
+                    f.User)
                 .ToListAsync();
         }
 
-        // Второй вариант метода: получает текущего пользователя сам.
         private async Task<List<User>> GetAllFriend()
         {
-            // Проверка обязательна! Метод асинхронный, пользователь может быть null.
             var currentUser = await _userManager.GetUserAsync(User);
 
             if (currentUser == null)
-                return []; // Или throw new UnauthorizedAccessException();
+                return [];
 
-            // Делегируем работу первому методу.
             return await GetAllFriend(currentUser);
         }
 
@@ -138,7 +129,6 @@ namespace AwesomeNetwork.Controllers.Account
             if (userFromDb == null)
                 return NotFound();
 
-            // Передаем вью-модель в AutoMapper, чтобы он сам обновил свойства сущности.
             _mapper.Map(model, userFromDb);
 
             var updateResult = await _userManager.UpdateAsync(userFromDb);
@@ -150,7 +140,6 @@ namespace AwesomeNetwork.Controllers.Account
 
             return View(nameof(EditUserProfile), model);
         }
-
 
         [Authorize]
         [Route("UserList")]
@@ -166,34 +155,29 @@ namespace AwesomeNetwork.Controllers.Account
         [HttpPost]
         public async Task<IActionResult> AddFriend(string id)
         {
-            // Получаем текущего пользователя
             var currentUser = await _userManager.GetUserAsync(User);
 
             if (currentUser == null || string.IsNullOrEmpty(id))
                 return NotFound();
 
-            // Ищем целевого пользователя по ID
             var targetUser = await _userManager.FindByIdAsync(id);
 
             if (targetUser == null)
-                return NotFound(); // Пользователь не найден
+                return NotFound();
 
-            // Проверяем, существует ли уже такая дружба
             bool isAlreadyFriends = await _context.Friends.AnyAsync(f =>
                 (f.UserId == currentUser.Id && f.CurrentFriendId == targetUser.Id) ||
                 (f.UserId == targetUser.Id && f.CurrentFriendId == currentUser.Id));
 
             if (isAlreadyFriends)
-                return RedirectToAction(nameof(MyPage)); // Или верните сообщение об ошибке
+                return RedirectToAction(nameof(MyPage));
 
-            // Создаём новую запись дружбы
             var friendship = new Friend()
             {
                 UserId = currentUser.Id,
                 CurrentFriendId = targetUser.Id
             };
 
-            // Добавляем в базу и сохраняем изменения
             await _context.Friends.AddAsync(friendship);
             await _context.SaveChangesAsync();
 
@@ -213,25 +197,20 @@ namespace AwesomeNetwork.Controllers.Account
             var targetUser = await _userManager.FindByIdAsync(id);
 
             if (targetUser == null)
-                return NotFound(); // Пользователь не найден
+                return NotFound();
 
-            // Находим запись дружбы по ID пользователей.
-            // Мы используем FirstOrDefaultAsync вместо SingleAsync,
-            // так как теоретически может быть несколько записей (если у вас нет уникального индекса).
             var friendship = await _context.Friends.FirstOrDefaultAsync(f =>
                 (f.UserId == currentUser.Id && f.CurrentFriendId == targetUser.Id) ||
                 (f.UserId == targetUser.Id && f.CurrentFriendId == currentUser.Id));
 
             if (friendship == null)
-                return RedirectToAction(nameof(MyPage)); // Или верните сообщение об ошибке "Не были друзьями"
+                return RedirectToAction(nameof(MyPage));
 
-            // Удаляем сущность и сохраняем изменения.
-            _context.Friends.Remove(friendship); // Не нужно вызывать Delete()
+            _context.Friends.Remove(friendship);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(MyPage));
         }
-
 
         private async Task<SearchViewModel> CreateSearch(string search)
         {
@@ -339,11 +318,11 @@ namespace AwesomeNetwork.Controllers.Account
                 History = messages.OrderBy(x => x.Id).ToList(),
             };
         }
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetChatHistory(string friendId)
         {
-            // Логика получения данных такая же, как в твоем методе Chat()
             var currentUser = await _userManager.GetUserAsync(User);
             var friend = await _userManager.FindByIdAsync(friendId);
 
@@ -352,10 +331,8 @@ namespace AwesomeNetwork.Controllers.Account
                 return NotFound();
             }
 
-            // Создаем модель
             var model = await GenerateChat(friendId);
 
-            // Возвращаем HTML-код частичного представления
             return PartialView("_ChatHistory", model);
         }
     }

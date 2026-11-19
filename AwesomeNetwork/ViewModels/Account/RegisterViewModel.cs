@@ -44,6 +44,9 @@ namespace AwesomeNetwork.ViewModels.Account
         [Display(Name = "Подтвердить пароль", Prompt = "Введите пароль повторно")]
         public string PasswordConfirm { get; set; }
 
+        /// <summary>
+        /// Использовать или Email или Nickname
+        /// </summary>
         /*[Required(ErrorMessage = "Поле Никнейм обязательно для заполнения")]
         [DataType(DataType.Text)]
         [Display(Name = "Никнейм", Prompt = "Введите никнейм")]

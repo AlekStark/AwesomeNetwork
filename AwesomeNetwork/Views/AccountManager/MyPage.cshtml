@@ -21,13 +21,7 @@ else
 
 			<div>
 				<form method="get" asp-controller="AccountManager" asp-action="EditUserProfile">
-					<!-- Скрытое поле для защиты от подделки запросов -->
-					@* @Html.AntiForgeryToken() *@
 					<input class="button-profile" type="submit" value="Редактировать" />
-@* 					<button type="submit"
-							class="button-profile">
-						Редактировать
-					</button> *@
 				</form>
 			</div>
 		</div>
@@ -48,7 +42,7 @@ else
 					
 					@foreach (var user in @Model.Friends)
 					{
-						<div>
+							<div class="friend-card">
 							<img class="friend-img" src="@user.Image" /><br/>
 							<label>@user.GetFullName()</label>
 							<div class="action-button-container mrgn center-align">

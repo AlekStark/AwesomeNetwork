@@ -1,6 +1,6 @@
 ﻿@model AwesomeNetwork.ViewModels.Account.ChatViewModel;
 
-@* <meta http-equiv="refresh" content="5"> *@
+@* <meta http-equiv="refresh" content="5"> убрал, т.к обновлялась вся страница а не блок с перепиской*@
 
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.min.js"></script>
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.10/jquery.validate.unobtrusive.min.js"></script>
@@ -17,27 +17,6 @@
         <!-- Подключаем частичное представление --> 
         @await Html.PartialAsync("_ChatHistory", Model)
     </div>
-@*     <div class="lined-block">
-        <label class="gray-text">Сообщения</label>
-
-        @if (Model.History.Count != 0)
-        {
-
-            @foreach (var message in @Model.History)
-            {
-                <div>
-                    <label> @message.Sender.FirstName:</label>
-                    @message.Text
-                </div>
-            }
-        }
-        else
-        {
-            <div>
-                <label> У вас пока нет сообщений с  @Model.ToWhom.GetFullName().</label>
-            </div>
-        }
-    </div> *@
 
     <div class="lined-block">
         <label class="gray-text">Новое сообщение</label>

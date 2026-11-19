@@ -83,10 +83,29 @@ hr {
 }
 
 .friend-img {
-    width: 135px;
-    height: 135px;
+    width: 150px;
+    height: 150px;
 }
 .friend-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+}
+/* Задаем общий стиль для всех кнопок действий в списке друзей */
+.friend-card .btn { /* .friend-card - это класс карточки, добавь его в MyPage.cshtml */
+    width: 100%; /* Растягиваем на всю ширину */
+    max-width: 180px; /* Задаем максимальную ширину */
+    white-space: normal; /* Разрешаем тексту переноситься на новую строку */
+    word-break: keep-all;
+    padding-top: 8px; /* Можно настроить паддинги */
+    padding-bottom: 8px;
+    font-size: 14px; /* Можно настроить размер шрифта */
+}
+
+/* Если нужно, можно задать разную максимальную ширину для разных кнопок */
+.friend-card .btn-chat {
+    max-width: 150px;
+}
+
+.friend-card .btn-delete {
+    max-width: 210px;
 }

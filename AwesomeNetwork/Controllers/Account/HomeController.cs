@@ -1,15 +1,10 @@
-using AutoMapper;
 using AwesomeNetwork.Models;
 using AwesomeNetwork.Models.Users;
 using AwesomeNetwork.ViewModels.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace AwesomeNetwork.Controllers.Account
 {

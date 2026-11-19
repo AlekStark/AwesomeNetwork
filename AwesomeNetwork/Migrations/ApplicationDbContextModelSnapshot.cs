@@ -73,7 +73,7 @@ namespace AwesomeNetwork.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Mesages", (string)null);
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeNetwork.Models.Users.User", b =>

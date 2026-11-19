@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AwesomeNetwork.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261118174324_AddMessagesTable")]
-    partial class AddMessagesTable
+    [Migration("20261118184555_CreateMessangeTable")]
+    partial class CreateMessangeTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,7 +76,7 @@ namespace AwesomeNetwork.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Mesages", (string)null);
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeNetwork.Models.Users.User", b =>

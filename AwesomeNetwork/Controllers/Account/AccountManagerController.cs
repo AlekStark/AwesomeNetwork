@@ -221,35 +221,44 @@ namespace AwesomeNetwork.Controllers.Account
 
         private async Task<SearchViewModel> CreateSearch(string search)
         {
-            var currentuser = User;
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return new SearchViewModel();             }
 
-            var result = await _userManager.GetUserAsync(currentuser);
+            var friendIds = await GetAllFriendIds(currentUser.Id);
 
-            var normalizedSearch = search?.ToLowerInvariant().Trim(); 
-            var list = await _userManager.Users
-                .Where(u => u.FirstName.ToLower().Contains(normalizedSearch) || u.LastName.ToLower().Contains(normalizedSearch))
-                .ProjectTo<UserWithFriendExt>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-
-            //var list = _userManager.Users.AsEnumerable().Where(x => x.GetFullName().ToLower().Contains(search.ToLower())).ToList();
+            var usersQuery = _userManager.Users.AsQueryable();
 
 
-            var withfriend = await GetAllFriend();
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var normalizedSearch = search.Trim().ToLowerInvariant();
+                usersQuery = usersQuery.Where(u =>
+                    u.FirstName.ToLower().Contains(normalizedSearch) ||
+                    u.LastName.ToLower().Contains(normalizedSearch));
+            }
+
+            var users = await usersQuery.ToListAsync();
 
             var data = new List<UserWithFriendExt>();
-            list.ForEach(x =>
+            foreach (var user in users)
             {
-                var t = _mapper.Map<UserWithFriendExt>(x);
-                t.IsFriendWithCurrent = withfriend.Where(y => y.Id == x.Id || x.Id == result.Id).Count() != 0;
-                data.Add(t);
-            });
+                var userViewModel = _mapper.Map<UserWithFriendExt>(user);
+                userViewModel.IsFriendWithCurrent = friendIds.Contains(user.Id);
+                data.Add(userViewModel);
+            }
 
-            var model = new SearchViewModel()
-            {
-                UserList = data
-            };
+            return new SearchViewModel { UserList = data };
+        }
 
-            return model;
+
+        private async Task<HashSet<string>> GetAllFriendIds(string userId)
+        {
+            return await _context.Friends
+                .Where(f => f.UserId == userId || f.CurrentFriendId == userId)
+                .Select(f => f.UserId == userId ? f.CurrentFriendId : f.UserId)
+                .ToHashSetAsync();
         }
 
         [Authorize]

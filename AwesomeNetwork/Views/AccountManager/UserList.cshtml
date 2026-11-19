@@ -1,32 +1,42 @@
-﻿@model AwesomeNetwork.ViewModels.Account.SearchViewModel;
+﻿@model AwesomeNetwork.ViewModels.Account.SearchViewModel
 
-
-<div class="block-reg background-white">
-
+<div class="search-results-container py-4">
     @if (Model.UserList.Any())
-    { 
-
-        @foreach (var user in @Model.UserList)
-        {
-            <div>
-                <label>@user.GetFullName()</label>
-                @if (!@user.IsFriendWithCurrent)
-                {
-                    <form asp-controller="AccountManager" asp-action="AddFriend" asp-route-id="@user.Id" method="post">
-                        <button type="submit" class="btn btn-sm btn-primary">
-                            Добавить в друзья
-                        </button>
-                    </form>
-                }
-            </div>
-        }
-     }
+    {
+        <div class="users-grid">
+            @foreach (var user in Model.UserList)
+            {
+                <div class="user-card">
+                    <div class="user-info p-3 text-center">
+                        <img src="@user.Image" class="avatar-lg" alt="Аватар @user.GetFullName()" />
+                        <h5 class="user-name mb-1">@user.GetFullName()</h5>
+                        @if (!string.IsNullOrEmpty(user.Status))
+                        {
+                            <p class="user-status text-muted small mb-1"><i>@user.Status</i></p>
+                        }
+                        @if (!string.IsNullOrEmpty(user.About))
+                        {
+                            <div class="user-about text-center small">
+                                <p class="mb-0">@user.About</p>
+                            </div>
+                        }
+                    </div>
+                    <div class="user-actions text-center">
+                        @if (!user.IsFriendWithCurrent)
+                        {
+                            <form asp-controller="AccountManager" asp-action="AddFriend" asp-route-id="@user.Id" method="post" class="mt-3">
+                                <button type="submit" class="btn btn-primary btn-sm px-4">Добавить в друзья</button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
     else
     {
-        <div>
-            <label> Поиск не дал результатов.</label>
+        <div class="text-center text-muted py-5">
+            <label>Поиск не дал результатов.</label>
         </div>
-    } 
-
-
+    }
 </div>

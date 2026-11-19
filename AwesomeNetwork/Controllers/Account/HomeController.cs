@@ -10,24 +10,41 @@ namespace AwesomeNetwork.Controllers.Account
 {
     public class HomeController : Controller
     {
-        private readonly UserManager<User> _userManager; 
-        public HomeController(UserManager<User> userManager) 
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        public HomeController(UserManager<User> userManager,
+            SignInManager<User> signInManager) 
         { 
-            _userManager = userManager; 
+            _userManager = userManager;
+            _signInManager = signInManager;
+
         }
 
         [Route("")]
         [Route("[controller]/[action]")]
         public IActionResult Index()
         {
-            return View(new MainViewModel());
-            //return View();
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("MyPage", "AccountManager");
+            }
+            else
+            {
+                return View(new MainViewModel());
+            }
         }
 
         [Route("[action]")]
         public IActionResult Privacy()
         {
-            return View();
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("MyPage", "AccountManager");
+            }
+            else
+            {
+                return View(new MainViewModel());
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

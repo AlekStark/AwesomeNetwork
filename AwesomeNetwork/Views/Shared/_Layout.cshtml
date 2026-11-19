@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using AwesomeNetwork.Models.Users
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,13 +12,32 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/base-styles.css" />
     <link rel="stylesheet" href="~/css/profile.css">
+    <link rel="stylesheet" href="~/css/search-results.css">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body class="background-main">
+    @inject SignInManager<User> SignInManager
+
     <header class="border-bottom header background-white">
         <div class="container">
             <div class="topnav">
-                <a asp-area="" asp-controller="Home" asp-action="Index">SocialNetwork</a>
+                <!-- Условный логотип -->
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="AccountManager" asp-action="MyPage">
+                        <img src="~/images/logo.png" class="me-2" alt="SocialNetwork" width="40" height="40" />
+                        <span class="d-none d-sm-inline-block">SocialNetwork</span>
+                    </a>
+                }
+                else
+                {
+                    <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                        <img src="~/images/logo.png" class="me-2" alt="SocialNetwork" width="40" height="40" />
+                        <span class="d-none d-sm-inline-block">SocialNetwork</span>
+                    </a>
+                }
+
                 <partial name="_SearchLayoutPartial" />
                 <partial name="_LogoutPartial" />
             </div>
